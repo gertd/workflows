@@ -4,14 +4,6 @@ on:
       GH_TOKEN:
         required: true
 
-env:
-  VAULT_ADDR: https://vault.eng.aserto.com/
-  PRE_RELEASE: ${{ github.ref == 'refs/heads/main' && 'main' || '' }}
-  GO_VERSION: "1.22"
-  GO_RELEASER_VERSION: "v1.24.0"
-  GO_LANGCI_LINT_VERSION: "v1.56.2"
-  GO_TESTSUM_VERSION: "1.11.0"
-
 jobs:
   go-build:
     runs-on: ubuntu-latest
@@ -20,10 +12,16 @@ jobs:
         name: checkout
         uses: actions/checkout@v4
       -
+        id: config
+        name: load env config
+        uses: gertd/yaml-reader-action@v1.0
+        with:
+          file: .github/env.yaml        
+      -
         name: setup go
         uses: actions/setup-go@v5
         with:
-          go-version: ${{ env.GO_VERSION }}
+          go-version: ${{ steps.config.outputs.GO_VERSION }}
       -
         name: build
         uses: goreleaser/goreleaser-action@v5
@@ -31,19 +29,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           distribution: goreleaser
-          version: ${{ env.GO_RELEASER_VERSION }}
+          version: ${{ steps.config.outputs.GO_RELEASER_VERSION }}
           args: build --clean --snapshot --single-target
       -
         name: lint
         uses: golangci/golangci-lint-action@v4
         with:
-          version: ${{ env.GO_LANGCI_LINT_VERSION }}
+          version: ${{ steps.config.outputs.GO_LANGCI_LINT_VERSION }}
           args: --timeout=30m
       -
         name: test setup
         uses: gertd/action-gotestsum@v3.0.0
         with:
-          gotestsum_version: ${{ env.GO_TESTSUM_VERSION }}
+          gotestsum_version: ${{ steps.config.outputs.GO_TESTSUM_VERSION }}
       -
         name: test
         run: |
