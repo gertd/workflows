@@ -1,8 +1,5 @@
 on:
   workflow_call:
-    secrets:
-      GH_TOKEN:
-        required: true
     outputs:
       VAULT_ADDR: 
         description: vault host address
