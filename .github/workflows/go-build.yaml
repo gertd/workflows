@@ -10,6 +10,8 @@ jobs:
 
   go-build:
     runs-on: ubuntu-latest
+    needs: go-env
+
     steps:
       -
         name: checkout
@@ -20,16 +22,16 @@ jobs:
       -
         name: print env
         run: |
-          echo "VAULT_ADDR: ${{ steps.config.outputs.VAULT_ADDR }}"
-          echo "GO_VERSION: ${{ steps.config.outputs.GO_VERSION }}"
-          echo "GO_RELEASER_VERSION: ${{ steps.config.outputs.GO_RELEASER_VERSION }}"
-          echo "GO_LANGCI_LINT_VERSION: ${{ steps.config.outputs.GO_LANGCI_LINT_VERSION }}"
-          echo "GO_TESTSUM_VERSION: ${{ steps.config.outputs.GO_TESTSUM_VERSION }}"
+          echo "VAULT_ADDR: ${{ needs.go-env.outputs.VAULT_ADDR }}"
+          echo "GO_VERSION: ${{ needs.go-env.outputs.GO_VERSION }}"
+          echo "GO_RELEASER_VERSION: ${{ needs.go-env.outputs.GO_RELEASER_VERSION }}"
+          echo "GO_LANGCI_LINT_VERSION: ${{ needs.go-env.outputs.GO_LANGCI_LINT_VERSION }}"
+          echo "GO_TESTSUM_VERSION: ${{ needs.go-env.outputs.GO_TESTSUM_VERSION }}"
       -
         name: setup go
         uses: actions/setup-go@v5
         with:
-          go-version: ${{ steps.config.outputs.GO_VERSION }}
+          go-version: ${{ needs.go-env.outputs.GO_VERSION }}
       -
         name: build
         uses: goreleaser/goreleaser-action@v5
@@ -37,19 +39,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           distribution: goreleaser
-          version: ${{ steps.config.outputs.GO_RELEASER_VERSION }}
+          version: ${{ needs.go-env.outputs.GO_RELEASER_VERSION }}
           args: build --clean --snapshot --single-target
       -
         name: lint
         uses: golangci/golangci-lint-action@v4
         with:
-          version: ${{ steps.config.outputs.GO_LANGCI_LINT_VERSION }}
+          version: ${{ needs.go-env.outputs.GO_LANGCI_LINT_VERSION }}
           args: --timeout=30m
       -
         name: test setup
         uses: gertd/action-gotestsum@v3.0.0
         with:
-          gotestsum_version: ${{ steps.config.outputs.GO_TESTSUM_VERSION }}
+          gotestsum_version: ${{ needs.go-env.outputs.GO_TESTSUM_VERSION }}
       -
         name: test
         run: |
