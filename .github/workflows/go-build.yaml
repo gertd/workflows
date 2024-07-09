@@ -14,7 +14,7 @@ jobs:
       -
         id: config
         name: load env config
-        uses: gertd/workflows/.github/workflows/go-env.yaml
+        uses: gertd/workflows/.github/workflows/go-env.yaml@main
       -
         name: print env
         run: |
