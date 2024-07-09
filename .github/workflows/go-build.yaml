@@ -18,6 +18,14 @@ jobs:
         with:
           file: .github/env.yaml        
       -
+        name: print env
+        run: |
+          echo "VAULT_ADDR: ${{ steps.config.outputs.VAULT_ADDR }}"
+          echo "GO_VERSION: ${{ steps.config.outputs.GO_VERSION }}"
+          echo "GO_RELEASER_VERSION: ${{ steps.config.outputs.GO_RELEASER_VERSION }}"
+          echo "GO_LANGCI_LINT_VERSION: ${{ steps.config.outputs.GO_LANGCI_LINT_VERSION }}"
+          echo "GO_TESTSUM_VERSION: ${{ steps.config.outputs.GO_TESTSUM_VERSION }}"
+      -
         name: setup go
         uses: actions/setup-go@v5
         with:
