@@ -33,4 +33,25 @@ jobs:
           distribution: goreleaser
           version: ${{ env.GO_RELEASER_VERSION }}
           args: build --clean --snapshot --single-target
-    
+      -
+        name: lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: ${{ env.GO_LANGCI_LINT_VERSION }}
+          args: --timeout=30m
+      -
+        name: test setup
+        uses: gertd/action-gotestsum@v3.0.0
+        with:
+          gotestsum_version: ${{ env.GO_TESTSUM_VERSION }}
+      -
+        name: test
+        run: |
+          gotestsum --format short-verbose -- -count=1 -parallel=1 -v -coverprofile=cover.out -coverpkg=./... ./...;
+      -
+        name: upload code coverage
+        uses: shogo82148/actions-goveralls@v1
+        continue-on-error: true
+        with:
+          path-to-profile: cover.out
+            
