@@ -17,10 +17,7 @@ jobs:
         name: checkout
         uses: actions/checkout@v4
       -
-        id: config
-        name: load env config
-      -
-        name: print env
+        name: print go-env values
         run: |
           echo "VAULT_ADDR: ${{ needs.go-env.outputs.VAULT_ADDR }}"
           echo "GO_VERSION: ${{ needs.go-env.outputs.GO_VERSION }}"
