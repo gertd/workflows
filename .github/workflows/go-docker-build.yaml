@@ -40,17 +40,11 @@ jobs:
           registry: https://ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      # -
-      #   name: docker SSH setup
-      #   run: |
-      #     mkdir -p $HOME/.ssh
-      #     umask 0077 && echo -e "${SSH_PRIVATE_KEY}" > $HOME/.ssh/id_rsa
-      #     ssh-keyscan github.com >> $HOME/.ssh/known_hosts
-      #     git config --global url."git@github.com:".insteadOf https://github.com/
-      #     git config --global user.email "github-bot@aserto.com"
-      #     git config --global user.name ""
-      #     eval `ssh-agent`
-      #     ssh-add $HOME/.ssh/id_rsa
+      -
+        name: Setup syft
+        uses: anchore/sbom-action/download-syft@v0
+        with:
+          syft-version: ${{ env.SYFT_VERSION }}
       -
         name: release
         uses: goreleaser/goreleaser-action@v6
