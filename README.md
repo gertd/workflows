@@ -1,2 +1,2 @@
 # workflows
-Shared GH workflows
+Shared GitHub workflows

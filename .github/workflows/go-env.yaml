@@ -1,21 +1,24 @@
 on:
   workflow_call:
     outputs:
-      VAULT_ADDR: 
-        description: vault host address
-        value: https://vault.eng.aserto.com/
       GO_VERSION: 
         description: golang compiler version
-        value: 1.22
+        value: 1.24
       GO_RELEASER_VERSION: 
         description: goreleaser version
-        value: v1.24.0
+        value: v2.8.2
       GO_LANGCI_LINT_VERSION: 
         description: linter version
-        value: v1.56.2
+        value: v2.0.2
       GO_TESTSUM_VERSION: 
         description: test runner version
-        value: 1.11.0
+        value: 1.12.1
+      SVU_VERSION:
+        description: semantic version util
+        value: 3.1.0
+      SYFT_VERSION:
+        description: SBOM util
+        value: 1.13.0
 
 jobs:
   go-env:
@@ -24,8 +27,9 @@ jobs:
       -
         id: shared-env
         run: |
-          echo "VAULT_ADDR=https://vault.eng.aserto.com/" >> $GITHUB_OUTPUT
-          echo "GO_VERSION=1.22" >> $GITHUB_OUTPUT
-          echo "GO_RELEASER_VERSION=v1.24.0" >> $GITHUB_OUTPUT
-          echo "GO_LANGCI_LINT_VERSION=v1.56.2" >> $GITHUB_OUTPUT
-          echo "GO_TESTSUM_VERSION=1.11.0" >> $GITHUB_OUTPUT
+          echo "GO_VERSION=1.24" >> $GITHUB_OUTPUT
+          echo "GO_RELEASER_VERSION=v2.8.2" >> $GITHUB_OUTPUT
+          echo "GO_LANGCI_LINT_VERSION=v2.0.2" >> $GITHUB_OUTPUT
+          echo "GO_TESTSUM_VERSION=1.12.1" >> $GITHUB_OUTPUT
+          echo "SVU_VERSION=3.1.0" >> $GITHUB_OUTPUT
+          echo "SYFT_VERSION=1.13.0" >> $GITHUB_OUTPUT

@@ -19,23 +19,12 @@ jobs:
       -
         name: print go-env values
         run: |
-          echo "VAULT_ADDR: ${{ needs.go-env.outputs.VAULT_ADDR }}"
           echo "GO_VERSION: ${{ needs.go-env.outputs.GO_VERSION }}"
           echo "GO_RELEASER_VERSION: ${{ needs.go-env.outputs.GO_RELEASER_VERSION }}"
           echo "GO_LANGCI_LINT_VERSION: ${{ needs.go-env.outputs.GO_LANGCI_LINT_VERSION }}"
           echo "GO_TESTSUM_VERSION: ${{ needs.go-env.outputs.GO_TESTSUM_VERSION }}"
-      -
-        name: read configuration
-        uses: hashicorp/vault-action@v3
-        id: vault
-        with:
-          url: ${{ needs.go-env.outputs.VAULT_ADDR }}
-          token: ${{ secrets.VAULT_TOKEN }}
-          secrets: |
-            kv/data/github  "SSH_PRIVATE_KEY"     | SSH_PRIVATE_KEY;
-            kv/data/github  "USERNAME"            | DOCKER_USERNAME;
-            kv/data/github  "DOCKER_PUSH_TOKEN"   | DOCKER_PASSWORD;
-            kv/data/github  "READ_WRITE_TOKEN"    | READ_WRITE_TOKEN;
+          echo "SVU_VERSION: ${{ needs.go-env.outputs.SVU_VERSION }}"
+          echo "SYFT_VERSION: ${{ needs.go-env.outputs.SYFT_VERSION }}"
       -
         name: setup go
         uses: actions/setup-go@v5
@@ -64,7 +53,7 @@ jobs:
           ssh-add $HOME/.ssh/id_rsa
       -
         name: release
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

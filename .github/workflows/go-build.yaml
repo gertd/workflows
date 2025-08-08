@@ -3,7 +3,7 @@ on:
     secrets:
       GH_TOKEN:
         required: true
-
+        
 jobs:
   go-env: 
     uses: gertd/workflows/.github/workflows/go-env.yaml@main
@@ -19,11 +19,12 @@ jobs:
       -
         name: print go-env values
         run: |
-          echo "VAULT_ADDR: ${{ needs.go-env.outputs.VAULT_ADDR }}"
           echo "GO_VERSION: ${{ needs.go-env.outputs.GO_VERSION }}"
           echo "GO_RELEASER_VERSION: ${{ needs.go-env.outputs.GO_RELEASER_VERSION }}"
           echo "GO_LANGCI_LINT_VERSION: ${{ needs.go-env.outputs.GO_LANGCI_LINT_VERSION }}"
           echo "GO_TESTSUM_VERSION: ${{ needs.go-env.outputs.GO_TESTSUM_VERSION }}"
+          echo "SVU_VERSION: ${{ needs.go-env.outputs.SVU_VERSION }}"
+          echo "SYFT_VERSION: ${{ needs.go-env.outputs.SYFT_VERSION }}"
       -
         name: setup go
         uses: actions/setup-go@v5
@@ -31,7 +32,7 @@ jobs:
           go-version: ${{ needs.go-env.outputs.GO_VERSION }}
       -
         name: build
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
@@ -40,7 +41,7 @@ jobs:
           args: build --clean --snapshot --single-target
       -
         name: lint
-        uses: golangci/golangci-lint-action@v4
+        uses: golangci/golangci-lint-action@v7
         with:
           version: ${{ needs.go-env.outputs.GO_LANGCI_LINT_VERSION }}
           args: --timeout=30m
