@@ -39,7 +39,7 @@ jobs:
         with:
           registry: https://ghcr.io
           username: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Setup syft
         uses: anchore/sbom-action/download-syft@v0
