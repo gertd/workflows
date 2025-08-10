@@ -10,6 +10,10 @@ jobs:
 
   go-docker-build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
     needs: go-env
 
     steps:
