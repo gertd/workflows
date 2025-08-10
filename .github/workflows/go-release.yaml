@@ -39,7 +39,7 @@ jobs:
         with:
           registry: https://ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       -
         name: Setup syft
         uses: anchore/sbom-action/download-syft@v0
@@ -49,8 +49,8 @@ jobs:
         name: release
         uses: goreleaser/goreleaser-action@v6
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOMEBREW_TAP: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          HOMEBREW_TAP: ${{ secrets.GH_TOKEN }}
         with:
           distribution: goreleaser
           version: ${{ needs.go-env.outputs.GO_RELEASER_VERSION }}
