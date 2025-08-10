@@ -26,18 +26,6 @@ jobs:
           echo "SVU_VERSION: ${{ needs.go-env.outputs.SVU_VERSION }}"
           echo "SYFT_VERSION: ${{ needs.go-env.outputs.SYFT_VERSION }}"
       -
-        name: read configuration
-        uses: hashicorp/vault-action@v3
-        id: vault
-        with:
-          url: ${{ needs.go-env.outputs.VAULT_ADDR }}
-          token: ${{ secrets.VAULT_TOKEN }}
-          secrets: |
-            kv/data/github  "SSH_PRIVATE_KEY"     | SSH_PRIVATE_KEY;
-            kv/data/github  "USERNAME"            | DOCKER_USERNAME;
-            kv/data/github  "DOCKER_PUSH_TOKEN"   | DOCKER_PASSWORD;
-            kv/data/github  "READ_WRITE_TOKEN"    | READ_WRITE_TOKEN;
-      -
         name: setup go
         uses: actions/setup-go@v5
         with:
@@ -50,8 +38,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: https://ghcr.io
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: docker SSH setup
         run: |
